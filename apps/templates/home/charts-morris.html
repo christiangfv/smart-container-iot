@@ -1,0 +1,182 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Charts Morris {% endblock %} 
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+
+    <link rel="stylesheet" href="/static/assets/plugins/chart-morris/css/morris.css">
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <!-- [ breadcrumb ] start -->
+        <div class="page-header">
+            <div class="page-block">
+                <div class="row align-items-center">
+                    <div class="col-md-12">
+                        <div class="page-header-title">
+                            <h5 class="m-b-10">{{ device_id }}</h5>
+                        </div>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="javascript:">Chart</a></li>
+                            <li class="breadcrumb-item"><a href="javascript:">Morris Chart</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- [ breadcrumb ] end -->
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- [ Main Content ] start -->
+                <div class="row">
+                    <!-- [ Morris Chart ] start -->
+                    <div class="col-xl">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Grafico de temperatura y humedad en el tiempo</h5>
+                            </div>
+                            <div class="card-block">
+                                <div id="morris-line-chart" style="height:300px"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% comment %} <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Line [ Angle ] Chart</h5>
+                            </div>
+                            <div class="card-block">
+                                <div id="morris-area-chart" style="height:300px"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Area [ Smooth ] Chart</h5>
+                            </div>
+                            <div class="card-block">
+                                <div id="morris-area-curved-chart" style="height:300px"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Line [ Angle ] Chart</h5>
+                            </div>
+                            <div class="card-block">
+                                <div id="morris-line-chart" class="ChartShadow" style="height:300px"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Line [ Smooth ] Chart</h5>
+                            </div>
+                            <div class="card-block">
+                                <div id="morris-line-smooth-chart" class="ChartShadow" style="height:300px"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Donut Chart</h5>
+                            </div>
+                            <div class="card-block">
+                                <div id="morris-donut-chart" style="height:300px"></div>
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                    <!-- [ Morris Chart ] end -->
+                </div>
+                <div class="row">
+                    <div class="col-xl">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Datos</h5>
+                            </div>
+                            <div class="card-block table-border-style">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Dispositivo</th>
+                                                <th>Fecha</th>
+                                                <th>Temperatura</th>
+                                                <th>Humedad</th>
+                                                <th>Luminosidad</th>
+                                                <th>latitud</th>
+                                                <th>longitud</th>
+                                                <th>Abierto</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for row in data %}
+                                                <tr>
+                                                    <td>{{row.deviceId}}</td>
+                                                    <td>{{row.EventEnqueuedUtcTime}}</td>
+                                                    <td>{{row.temperature}}</td>
+                                                    <td>{{row.humidity}}</td>
+                                                    <td>{{row.luminosity}}</td>
+                                                    <td>{{row.latitude}}</td>
+                                                    <td>{{row.longitude}}</td>
+                                                    <td>{{row.open}}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- [ Main Content ] end -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+    <script src="/static/assets/plugins/chart-morris/js/raphael.min.js"></script>
+    <script src="/static/assets/plugins/chart-morris/js/morris.min.js"></script>
+    
+    {% comment %} <script src="/static/assets/js/pages/chart-morris-custom.js"></script> {% endcomment %}
+    <script>
+    $(document).ready(function() {
+        setTimeout(function() {
+        // [ bar-simple ] chart start
+        Morris.Line({
+            element: 'morris-line-chart',
+            data: {{ graph|safe }},
+            xkey: 'y',
+            redraw: true,
+            resize: true,
+            smooth: false,
+            ykeys: ['a', 'b', 'c'],
+            hideHover: 'auto',
+            responsive:true,
+            labels: ['Temperatura', 'Humedad', 'Luminosidad'],
+            lineColors: ['#1de9b6', '#04a9f5', '#04a9f9']
+        });
+        }, 700);
+    });    
+    </script>
+    
+
+{% endblock javascripts %}
